@@ -71,7 +71,6 @@ resource "aws_security_group" "terraira-server-vpc-sg" {
     to_port = 0
     protocol = "-1"
     cidr_blocks = [ 
-      "***REMOVED***"
     ]
   }
 

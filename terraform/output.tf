@@ -18,7 +18,7 @@ resource "local_file" "ansible-inventory" {
     aws_instance.ec2
   ]
   content = <<-EOF
-    [ec2]
+    [terraria-server]
     ${join("\n",
       formatlist(
         "%s ansible_host=%s private_ip=%s",

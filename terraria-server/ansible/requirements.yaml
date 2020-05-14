@@ -1,0 +1,4 @@
+- src: https://github.com/komish/terraria_server.git
+  scm: git
+  name: terraria_server
+  version: "master"

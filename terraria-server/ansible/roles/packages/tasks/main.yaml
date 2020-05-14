@@ -1,0 +1,14 @@
+---
+- name: Update APT cache, update installed packages, install required packages and reboot the system if needed
+  block:
+    - name: Update APT cache and upgrade installed packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+      register: system_upgrade
+    
+    - name: Reboot after update
+      reboot:
+        msg: "Automatic reboot after updating the OS, by Ansible"
+      when: system_upgrade.changed
+

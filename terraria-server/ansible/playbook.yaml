@@ -1,0 +1,34 @@
+---
+- name: Update system
+  tags: 
+    - system-config
+  hosts: terraria-server
+  become: true
+  roles:
+    - packages
+  
+- name: Install Terraria Server files
+  tags: 
+    - terraria-server
+    - terraria-server-install
+  hosts: terraria-server
+  become: true
+  roles:
+    terraria-server
+  vars:
+    terraria_version: 1353
+    terraria_user: terraria
+    terraria_install_path: /opt/terraria-server
+    backup_preserve_age_minutes: 43200 # 60 minutes * 24 hours * 30 days
+    world_name: "L30Bola Terraria World"
+    world_motd: "Welcome to L30Bola's Terraria Server"
+    world_difficulty: "normal"
+    world_size: "large"
+    world_max_players: "16"
+    world_autocreate: True
+    world_seed: "13378175817867062143" # generated with $(od -vAn -N8 -tu8 < /dev/urandom)
+    server_port: 7777
+    server_npc_stream: 10
+    server_system_priority: "high"
+    server_upnp_enabled: False
+    world_secure_level: 0

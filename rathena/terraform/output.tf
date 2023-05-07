@@ -13,7 +13,7 @@ output "ec2_private_ips" {
 }
 
 resource "local_file" "ansible-inventory" {
-  filename = "../ansible/inventory.ini"
+  filename = "../ansible/inventory/inventory.ini"
   file_permission = "0644"
   depends_on = [
     aws_instance.ec2

@@ -1,0 +1,41 @@
+- name: Clone ddclient repository
+  ansible.builtin.git:
+    repo: "https://github.com/ddclient/ddclient.git"
+    dest: "/tmp/ddclient"
+    version: "v3.10.0"
+  tags:
+    - ddclient_clone
+- name: Run autogen for ddclient repository
+  ansible.builtin.command:
+    chdir: "/tmp/ddclient"
+    cmd: "./autogen"
+    creates: "configure"
+  tags: 
+    - ddclient_autogen
+- name: Run configure for ddclient repository
+  ansible.builtin.command:
+    chdir: "/tmp/ddclient"
+    argv:
+      - "./configure"
+      - "--prefix=/usr"
+      - "--sysconfdir=/etc/ddclient"
+      - "--localstatedir=/var"
+    creates: "config.status"
+  tags:
+    - ddclient_configure
+- name: Run make for ddclient repository
+  ansible.builtin.command:
+    chdir: "/tmp/ddclient"
+    cmd: "make"
+    creates: "ddclient"
+  tags:
+    - ddclient_make
+- name: Install ddclient built binary
+  become: true
+  ansible.builtin.command:
+    chdir: "/tmp/ddclient"
+    cmd: "make install"
+    creates: "/usr/bin/ddclient"
+  tags:
+    - ddclient_make_install
+    

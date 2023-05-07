@@ -1,0 +1,23 @@
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: true
+  tags:
+    - apt_upgrade
+- name: Install APT packages
+  ansible.builtin.apt:
+    pkg:
+      - git
+      - curl
+      - make
+      - autoconf
+      - libmariadb-dev
+      - libmariadb-dev-compat
+      - gcc
+      - g++
+      - zlib1g-dev
+      - libpcre3-dev
+    state: present
+  tags:
+    - apt_install

@@ -53,3 +53,21 @@
         address: "{{ lookup('ansible.builtin.env', 'ddclient_address', default=Undefined) }}"
   tags:
     - ddclient_install_config
+- name: Install ddclient systemd unit
+  become: true
+  ansible.builtin.copy:
+    remote_src: true
+    src: "/tmp/ddclient/sample-etc_systemd.service"
+    dest: "/etc/systemd/system/ddclient.service"
+    mode: 0644
+  tags:
+    - ddclient_install_systemd_unit
+- name: Enable and start ddclient systemd unit
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: "ddclient"
+    state: "started"
+  tags:
+    - ddclient_start_enable_systemd_unit

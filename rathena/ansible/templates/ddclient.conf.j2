@@ -1,0 +1,31 @@
+# {{ ansible_managed }}
+# copied from https://github.com/jpartain89/ansible-role-ddclient/blob/master/templates/ddclient.conf.j2
+
+daemon=30
+syslog=yes
+mail=root
+mail-failure=root
+pid=/var/run/ddclient.pid
+ssl=yes
+
+use=web
+web=ipinfo.io/ip
+
+{% for entry in ddclient_conf %}
+{% for key, value in entry.items() %}
+# {{ key }}={{ value }}
+{% endfor %}
+
+{% if entry.protocol is defined %}
+protocol={{ entry.protocol }}
+{% endif -%}
+{% if entry.login is defined %}
+login={{ entry.login }}
+{% endif -%}
+{% if entry.password is defined %}
+password={{ entry.password }}
+{% endif -%}
+{% if entry.address is defined %}
+{{ entry.address }}
+{% endif %}
+{% endfor %}

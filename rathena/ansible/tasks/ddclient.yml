@@ -44,7 +44,7 @@
     backup: true
     dest: "/etc/ddclient/ddclient.conf"
     src: "templates/ddclient.conf.j2"
-    mode: 0644
+    mode: 644
   vars:
     ddclient_conf:
       - protocol: "{{ lookup('ansible.builtin.env', 'ddclient_protocol', default=Undefined) }}"
@@ -59,7 +59,7 @@
     remote_src: true
     src: "/tmp/ddclient/sample-etc_systemd.service"
     dest: "/etc/systemd/system/ddclient.service"
-    mode: 0644
+    mode: 644
   tags:
     - ddclient_install_systemd_unit
 - name: Enable and start ddclient systemd unit

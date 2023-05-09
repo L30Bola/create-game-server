@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "rAthena full installer"
+version = "0.1.0"
+description = "Installs rAthena Server and dependencies"
+authors = ["Leonardo Godoy <leonardoggavellar@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+ansible = "~2"
+mysqlclient = "~2.1.1" # https://github.com/PyMySQL/mysqlclient#linux
+
+[tool.poetry.dev-dependencies]

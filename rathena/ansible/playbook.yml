@@ -12,3 +12,11 @@
       ansible.builtin.import_tasks: tasks/ddclient.yml
       tags:
         - ddclient
+    - name: Configure MySQL
+      ansible.builtin.import_tasks: tasks/mysql.yml
+      tags:
+        - mysql
+    - name: Install rAthena Server
+      ansible.builtin.import_tasks: tasks/rathena.yml
+      tags:
+        - rathena

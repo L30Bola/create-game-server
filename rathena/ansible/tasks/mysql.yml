@@ -1,0 +1,30 @@
+- name: Enable and start mysql systemd unit
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: "mysql"
+    state: "started"
+  tags:
+    - mysql_start_enable_systemd_unit
+- name: Create MySQL 'ragnarok' db
+  community.mysql.mysql_db:
+    name: "ragnarok"
+    state: "present"
+  tags:
+    - mysql_create_db
+- name: Create MySQL 'ragnarok' user
+  community.mysql.mysql_user:
+    name: "ragnarok"
+    password: "ragnarok"
+    priv: 'ragnarok.*:ALL'
+    host: '127.0.0.1'
+    state: present
+  tags:
+    - mysql_create_user
+- name: Restart mysql systemd unit
+  ansible.builtin.systemd:
+    enabled: true
+    name: "mysql"
+    state: "restarted"
+  tags:
+    - mysql_restart_systemd_unit

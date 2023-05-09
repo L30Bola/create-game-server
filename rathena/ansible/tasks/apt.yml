@@ -18,6 +18,10 @@
       - g++
       - zlib1g-dev
       - libpcre3-dev
+      - libio-socket-ssl-perl
+      - mysql-server
+      - mysql-client
+      - libmysqlclient-dev
     state: present
   tags:
     - apt_install

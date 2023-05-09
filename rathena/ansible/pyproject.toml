@@ -6,7 +6,7 @@ authors = ["Leonardo Godoy <leonardoggavellar@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-ansible = "~2"
+ansible = "~7"
 mysqlclient = "~2.1.1" # https://github.com/PyMySQL/mysqlclient#linux
 
 [tool.poetry.dev-dependencies]

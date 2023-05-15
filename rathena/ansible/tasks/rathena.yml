@@ -1,13 +1,59 @@
 - name: Set rAthena install directory
   ansible.builtin.set_fact:
     rathena_install_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/rathena"
+    rathena_renewal_server: true
+    rathena_common_sql_files:
+      - main.sql
+      - web.sql
+      - roulette_default_data.sql
+      - logs.sql
+    rathena_non_renewal_sql_files:
+      - item_db.sql
+      - item_db_equip.sql
+      - item_db_etc.sql
+      - item_db2.sql
+      - item_db_usable.sql
+      - mob_db.sql
+      - mob_db2.sql
+      - mob_skill_db.sql
+      - mob_skill_db2.sql
+    rathena_renewal_sql_files:
+      - item_db_re.sql
+      - item_db_re_equip.sql
+      - item_db_re_etc.sql
+      - item_db_re_usable.sql
+      - item_db2_re.sql
+      - mob_db_re.sql
+      - mob_db2_re.sql
+      - mob_skill_db_re.sql
+      - mob_skill_db2_re.sql
   tags:
     - rathena_facts
 - name: Clone rAthena repository
   ansible.builtin.git:
     repo: "https://github.com/rathena/rathena.git"
     dest: "{{ rathena_install_dir }}"
-    version: "v3.10.0"
   tags:
     - rathena_clone
-- name: Import rAthena MySQL files
+- name: Import rAthena MySQL files - Renewal
+  when: rathena_renewal_server
+  community.mysql.mysql_db:
+    chdir: "{{ rathena_install_dir }}/sql-files"
+    db: "ragnarok"
+    login_host: "localhost"
+    login_user: "ragnarok"
+    login_password: "ragnarok"
+    state: "import"
+    target: "{{ item }}"
+  loop: "{{ rathena_renewal_sql_files | flatten(levels=1) }}"
+- name: Import rAthena MySQL files - Pre-Renewal
+  when: not rathena_renewal_server
+  community.mysql.mysql_db:
+    chdir: "{{ rathena_install_dir }}/sql-files"
+    db: "ragnarok"
+    login_host: "localhost"
+    login_user: "ragnarok"
+    login_password: "ragnarok"
+    state: "import"
+    target: "{{ item }}"
+  loop: "{{ rathena_non_renewal_sql_files | flatten(levels=1) }}"

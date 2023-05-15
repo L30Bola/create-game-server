@@ -1,13 +1,13 @@
 ---
 - hosts:
     - ragnarok
-  name: Installs dependencies for rAthena Server
+  name: Installs and configure rAthena Server and it's dependencies
   become: true
   tasks:
     - name: Execute APT chores
       ansible.builtin.import_tasks: tasks/apt.yml
       tags:
-        - apt_chores
+        - apt
     - name: Install ddclient
       ansible.builtin.import_tasks: tasks/ddclient.yml
       tags:

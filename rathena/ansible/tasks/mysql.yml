@@ -6,12 +6,14 @@
     state: "started"
   tags:
     - mysql_start_enable_systemd_unit
+
 - name: Create MySQL 'ragnarok' db
   community.mysql.mysql_db:
     name: "ragnarok"
     state: "present"
   tags:
     - mysql_create_db
+
 - name: Create MySQL 'ragnarok' user
   community.mysql.mysql_user:
     name: "ragnarok"
@@ -21,6 +23,7 @@
     state: present
   tags:
     - mysql_create_user
+
 - name: Restart mysql systemd unit
   ansible.builtin.systemd:
     enabled: true

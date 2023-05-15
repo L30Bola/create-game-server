@@ -5,6 +5,7 @@
     update_cache: true
   tags:
     - apt_upgrade
+
 - name: Install APT packages
   ansible.builtin.apt:
     pkg:
@@ -21,7 +22,7 @@
       - libio-socket-ssl-perl
       - mysql-server
       - mysql-client
-      - libmysqlclient-dev
+      - python3-mysqldb
     state: present
   tags:
     - apt_install

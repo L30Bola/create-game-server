@@ -68,6 +68,7 @@
     mode: "0644"
   tags:
     - ddclient_install_systemd_unit
+    - ddclient_systemd_unit
 
 - name: Enable and start ddclient systemd unit
   become: true
@@ -78,3 +79,4 @@
     state: "started"
   tags:
     - ddclient_start_enable_systemd_unit
+    - ddclient_systemd_unit

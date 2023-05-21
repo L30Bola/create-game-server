@@ -64,3 +64,89 @@
   loop: "{{ rathena_common_sql_files + rathena_pre_renewal_sql_files }}"
   tags:
     - rathena_import_sql_files
+
+- name: Run configure for rAthena repository
+  ansible.builtin.command:
+    chdir: "{{ rathena_install_dir }}"
+    cmd: "./configure"
+    creates: "config.status"
+  tags:
+    - rathena_configure
+
+- name: Run 'make server' for rAthena repository
+  ansible.builtin.command:
+    chdir: "{{ rathena_install_dir }}"
+    argv:
+      - "make"
+      - "server"
+    creates: "login-server"
+  tags:
+    - rathena_make
+
+- name: Install rAthena Char Server systemd unit
+  become: true
+  ansible.builtin.template:
+    backup: true
+    dest: "/etc/systemd/system/rathena_char_server.service"
+    src: "templates/rathena_server.service.j2"
+    mode: "0644"
+  vars:
+    binary_name: "char-server"
+  tags:
+    - rathena_install_char_server_systemd_unit
+    - rathena_install_systemd_units
+
+- name: Install rAthena Login Server systemd unit
+  become: true
+  ansible.builtin.template:
+    backup: true
+    dest: "/etc/systemd/system/rathena_login_server.service"
+    src: "templates/rathena_server.service.j2"
+    mode: "0644"
+  vars:
+    binary_name: "login-server"
+  tags:
+    - rathena_install_login_server_systemd_unit
+    - rathena_install_systemd_units
+
+- name: Install rAthena Map Server systemd unit
+  become: true
+  ansible.builtin.template:
+    backup: true
+    dest: "/etc/systemd/system/rathena_map_server.service"
+    src: "templates/rathena_server.service.j2"
+    mode: "0644"
+  vars:
+    binary_name: "map-server"
+  tags:
+    - rathena_install_map_server_systemd_unit
+    - rathena_install_systemd_units
+
+- name: Install rAthena Web Server systemd unit
+  become: true
+  ansible.builtin.template:
+    backup: true
+    dest: "/etc/systemd/system/rathena_web_server.service"
+    src: "templates/rathena_server.service.j2"
+    mode: "0644"
+  vars:
+    binary_name: "web-server"
+  tags:
+    - rathena_install_web_server_systemd_unit
+    - rathena_install_systemd_units
+
+- name: Enable and start rAthena systemd units
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    enabled: true
+    name: "{{ item }}"
+    state: "started"
+  loop:
+    - "char-server"
+    - "login-server"
+    - "map-server"
+    - "web-server"
+  tags:
+    - rathena_start_enable_systemd_unit
+    - rathena_install_systemd_units

@@ -1,0 +1,11 @@
+[Unit]
+Description=rAthena {{ binary_name }} 
+Wants=network-online.target
+After=network-online.target mysql.service
+
+[Service]
+Type=simple
+ExecStart={{ rathena_install_dir }}/{{ binary_name }}
+
+[Install]
+WantedBy=multi-user.target

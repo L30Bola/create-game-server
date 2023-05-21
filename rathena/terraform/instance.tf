@@ -1,20 +1,51 @@
+locals {
+  rathena_ports = [
+    {
+      port        = -1
+      description = "ICMP (Ping)"
+      protocol    = "icmp"
+    },
+    {
+      port        = 22
+      description = "SSH"
+      protocol    = "tcp"
+    },
+    {
+      port        = 6900
+      description = "Login Server"
+      protocol    = "tcp"
+    },
+    {
+      port        = 6121
+      description = "Char Server"
+      protocol    = "tcp"
+    },
+    {
+      port        = 5121
+      description = "Map Server"
+      protocol    = "tcp"
+    },
+    {
+      port        = 8888
+      description = "Web Server"
+      protocol    = "tcp"
+    }
+  ]
+}
+
 resource "aws_security_group" "sg" {
   name = "leonardo-godoy"
 
-  ingress {
-    from_port = -1
-    to_port   = -1
-    protocol  = "icmp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+  dynamic "ingress" {
+    for_each = local.rathena_ports
+    content {
+      protocol         = ingress.value.protocol
+      from_port        = ingress.value.port
+      to_port          = ingress.value.port
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      description      = "rAthena ${ingress.value.description} port"
+    }
   }
 
   egress {

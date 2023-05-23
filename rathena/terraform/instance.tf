@@ -1,40 +1,5 @@
-locals {
-  rathena_ports = [
-    {
-      port        = -1
-      description = "ICMP (Ping)"
-      protocol    = "icmp"
-    },
-    {
-      port        = 22
-      description = "SSH"
-      protocol    = "tcp"
-    },
-    {
-      port        = 6900
-      description = "Login Server"
-      protocol    = "tcp"
-    },
-    {
-      port        = 6121
-      description = "Char Server"
-      protocol    = "tcp"
-    },
-    {
-      port        = 5121
-      description = "Map Server"
-      protocol    = "tcp"
-    },
-    {
-      port        = 8888
-      description = "Web Server"
-      protocol    = "tcp"
-    }
-  ]
-}
-
 resource "aws_security_group" "sg" {
-  name = "leonardo-godoy"
+  name = "rathena-server"
 
   dynamic "ingress" {
     for_each = local.rathena_ports
@@ -61,10 +26,33 @@ resource "aws_security_group" "sg" {
   }
 }
 
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = [local.ami_owner]
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-${local.ami_name}-${local.ami_architecture}-server-*"]
+  }
+}
+
+resource "tls_private_key" "generated_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "generated_key" {
+  key_name   = local.key_name
+  public_key = tls_private_key.generated_key.public_key_openssh
+}
+
 resource "aws_instance" "ec2" {
-  ami                         = "ami-0bd8c2c70c6607283" #Ubuntu Server 23.04
+  ami                         = data.aws_ami.ubuntu.id #Ubuntu Server 23.04
   instance_type               = "c6i.xlarge"
-  key_name                    = "leonardo-godoy"
+  key_name                    = aws_key_pair.generated_key.key_name
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.sg.id]
 
@@ -77,7 +65,7 @@ resource "aws_instance" "ec2" {
   }
 
   tags = {
-    Name      = "leonardo-godoy"
+    Name      = "rathena-server"
     Permanent = "true"
   }
 }

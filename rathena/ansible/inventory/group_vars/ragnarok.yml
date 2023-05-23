@@ -1,1 +1,1 @@
-ansible_ssh_private_key_file: ~/.ssh/leonardo-godoy-sa.pem
+ansible_ssh_private_key_file: ./key.pem

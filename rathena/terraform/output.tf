@@ -30,3 +30,12 @@ resource "local_file" "ansible-inventory" {
     )}
   EOF
 }
+
+resource "local_file" "key-file" {
+  filename = "../ansible/key.pem"
+  file_permission = "0600"
+  depends_on = [
+    tls_private_key.generated_key
+  ]
+  content = tls_private_key.generated_key.private_key_pem
+}

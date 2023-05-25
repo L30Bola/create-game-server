@@ -1,5 +1,6 @@
 - name: Set rAthena Ansible facts
   ansible.builtin.set_fact:
+    rathena_packet_version: "20230420"
     rathena_install_dir: "/opt/rathena"
     rathena_renewal_server: true
     rathena_common_sql_files:
@@ -143,10 +144,10 @@
     name: "{{ item }}"
     state: "started"
   loop:
-    - "char-server"
-    - "login-server"
-    - "map-server"
-    - "web-server"
+    - "rathena_char_server"
+    - "rathena_login_server"
+    - "rathena_map_server"
+    - "rathena_web_server"
   tags:
     - rathena_start_enable_systemd_unit
     - rathena_install_systemd_units

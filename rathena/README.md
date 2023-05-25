@@ -29,3 +29,6 @@ This will create:
 + an AWS Key Pair (the Public Key from the above Private Key)
 + an EC2 Instance
 + the Ansible inventory file on `ansible/inventory/inventory.ini`
+
+### Temp
+"http://nemo.herc.ws/get4.py"
